@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务一：表单（一）单个表单项的检验</title>
+    <style>
+        input, textarea, keygen, select, button {
+            text-rendering: auto;
+            color: initial;
+            letter-spacing: normal;
+            word-spacing: normal;
+            text-transform: none;
+            text-indent: 0px;
+            text-shadow: none;
+            display: inline-block;
+            text-align: start;
+            margin: 0em 0em 0em 0em;
+            font: 13.3333px Arial;
+        }
+
+        p{margin: 0; padding: 0;}
+        .row-label-input{
+            width:300px;
+            display:flex;
+        }
+        .y-label{
+            width: 100px;
+            margin: 3px 6px;
+            text-align: right;
+        }
+
+        .y-label:after {
+            content: ":"
+        }
+
+        .y-input {
+            flex-grow:100;
+            display: block;
+            height: 20px;
+            margin: 0 6px;
+            padding: 3px 6px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .y-button{
+            width: 100px;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            display: inline-block;
+            padding: 3px 6px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .row-msg {
+            margin: 2px 0px 2px 60px;
+        }
+
+        .msg-default {
+            color: gray
+        }
+
+        .msg-error {
+            color: #c41c1b
+        }
+
+        .msg-correct {
+            color: #2dc82d
+        }
+
+    </style>
+    <script type="text/javascript" src="../../build/jquery.min.js"></script>
+</head>
+<body>
+<div>
+    <div class="row-label-input">
+        <label class="y-label" for="userName">名称</label>
+        <input class="y-input" type="text" id="userName" validate='required|length(4,16)' validate-msg="必填，长度为4-16个字符">
+        <button class="y-button">验证</button>
+    </div>
+    <p class="row-msg msg-default">必填，长度为4-16个字符</p>
+</div>
+</body>
+<script type="text/javascript">
+
+    $(document).on('click', function (ev){
+        var ev = ev || window.event;
+        var target = ev.target || ev.srcElement;
+        if($(target).hasClass('y-button')){
+            var label = $(target).siblings('label').html();
+            var input = $(target).siblings('input');
+            var inputMsg = input.attr('validate-msg');
+            var inputMsgDom = input.parent('.row-label-input').siblings('.row-msg');
+            var validate = input.attr('validate');
+            var value = input.val();
+
+            if(typeof validate != 'undefined'){
+                validateFun(validate, value, label, function (validateResult, validateMsg){
+                    if(validateResult){
+                        inputMsgDom.removeClass('msg-default msg-error msg-correct').addClass('msg-correct').html(label + '格式正确');
+                    } else {
+                        inputMsgDom.removeClass('msg-default msg-error msg-correct').addClass('msg-error').html(typeof inputMsg != 'undefined' ? inputMsg : validateMsg);
+                    }
+                });
+            }
+        }
+    });
+
+    function validateFun(validate, value, label, callback){
+        var type = validate.split('|');
+        var validateResult = true;
+        var validateMsg = '';
+        $.each(type, function () {
+            if (this == 'required') {
+                if (value.trim().length == 0) {
+                    validateResult = false
+                    validateMsg = label + '不能为空';
+                    return false;
+                }
+            } else if (this.slice(0, 6) == 'length') {
+                var length = this.slice(7, -1);
+                var start = Number(length.split(',')[0]);
+                var end = Number(length.split(',')[1]);
+                var valueLength = value.replace(/[^\x00-\xff]/g,'aa').length;
+                if (valueLength > end || valueLength < start) {
+                    validateResult = false
+                    validateMsg = '长度为' + start + '到' + end + '个字符';
+                    return false;
+                }
+            }
+        });
+        callback(validateResult, validateMsg);
+    }
+
+
+</script>
+</html>
