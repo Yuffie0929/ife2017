@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td id="john" name="myname" data="hahaha">John</td>
+            <td>Doe</td>
+            <td id="jack">Jack</td>
+        </tr>
+    </table>
+</body>
+<script type="text/javascript">
+    var a = '111';
+    console.log(a.nodeType);  //undefined
+    console.log(a.nodeName);  //undefined
+    console.log(a.nodeValue); //undefined
+    // 元素节点
+    // nodeType=1
+    // nodeName=标签名（返回的是大写）
+    // nodeValue=null 元素节点不含有文本
+    var b = document.getElementById("john");
+    console.log(b.nodeType);  //1
+    console.log(b.nodeName);  //TD
+    console.log(b.nodeValue); //null
+    // 属性节点
+    // nodeType=2
+    // nodeName=属性名（返回的名称是大写的）
+    // nodeValue=属性值
+    var c = document.getElementById("john").getAttributeNode("data");
+    console.log(c.nodeType);  //2
+    console.log(c.nodeName);  //name
+    console.log(c.nodeValue); //myname
+    // 文本节点
+    // nodeType=3
+    // nodeName=#text
+    // nodeValue=文本值
+    var d = document.getElementsByTagName("td")[0].firstChild;
+    console.log(d.nodeType);  //3
+    console.log(d.nodeName);  //#text
+    console.log(d.nodeValue); //John
+    //注释节点 nodeType=8
+    //文档节点 nodeType=9
+
+</script>
+</html>
