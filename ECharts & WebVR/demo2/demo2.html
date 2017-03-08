@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WebGL No.1 - Three.js 入门</title>
+    <title>WebGL No. 2 - 光与影</title>
     <style>
         div{
             color:#fff;
@@ -17,7 +17,7 @@
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(800, 600);
-    renderer.setClearColor(0x000000);
+    renderer.shadowMapEnabled = true;
     document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
 
     var scene = new THREE.Scene();
@@ -34,10 +34,10 @@
         color: 0xFF90C7,
         emissive: 0xFF90C7
     });
-
-    var light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(10, 15, 5);
-    scene.add(light);
+    var meterialLand = new THREE.MeshLambertMaterial({
+        color: 0x12352B,
+        emissive: 0x12352B
+    });
 
     /**
      * 长方体
@@ -51,8 +51,16 @@
     body.position.z = 1;
     body.position.x = 2;
     body.position.y = 1.5;
+    body.castShadow = true;
     scene.add(body);
 
+    var plane = new THREE.Mesh(new THREE.PlaneGeometry(20, 20, 16, 16), meterialLand);
+    plane.position.x = 2;
+    plane.position.y = -1;
+    plane.position.z = 1;
+    plane.rotation.x = -Math.PI / 2;  //旋转
+    plane.receiveShadow = true;
+    scene.add(plane);
     /**
      * 球体
      * THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc);
@@ -66,22 +74,48 @@
     wheel1.scale.z = 2;  //变形
     wheel1.position.z = 2; //位移
     wheel1.rotation.z = 0;  //旋转
+    wheel1.castShadow = true;
     scene.add(wheel1);
 
     var wheel2 = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterialWheel);
     wheel2.scale.z = 2;
+    wheel2.castShadow = true;
     scene.add(wheel2);
 
     var wheel3 = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterialWheel);
     wheel3.scale.z = 2;
     wheel3.position.x = 4;
+    wheel3.castShadow = true;
     scene.add(wheel3);
 
     var wheel4 = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterialWheel);
-    wheel4.scale.z = 2;
     wheel4.position.z = 2; //位移
     wheel4.position.x = 4;
+    wheel4.scale.z = 2;
+    wheel4.castShadow = true;
     scene.add(wheel4);
+
+    var light = new THREE.SpotLight(0xffffff, 1, 100, Math.PI / 6, 25);
+    light.position.set(8, 4, 15);
+    light.target = plane;
+    light.castShadow = true;
+    scene.add(light);
+
+
+    var alpha = 0;
+    function draw() {
+        alpha += 0.01;
+        if (alpha > Math.PI * 2) {
+            alpha -= Math.PI * 2;
+        }
+        body.position.set(2 * Math.cos(alpha) + 2, 1, 2 * Math.sin(alpha) + 1.25);
+        wheel1.position.set(2 * Math.cos(alpha), 0, 2 * Math.sin(alpha));
+        wheel2.position.set(2 * Math.cos(alpha) + 4, 0, 2 * Math.sin(alpha));
+        wheel3.position.set(2 * Math.cos(alpha), 0, 2 * Math.sin(alpha) + 2.5);
+        wheel4.position.set(2 * Math.cos(alpha) + 4, 0, 2 * Math.sin(alpha) + 2.5);
+        renderer.render(scene, camera);
+        requestAnimationFrame(draw);
+    }
 
     renderer.render(scene, camera);
 </script>
