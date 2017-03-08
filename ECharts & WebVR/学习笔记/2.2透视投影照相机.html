@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script type="text/javascript" src="../build/three.js"></script>
+<script type="text/javascript">
+    /**
+     * THREE.PerspectiveCamera(fov, aspect, near, far);
+     * fov 是视景体竖直方向上的张角（是角度制而非弧度制），如侧视图所示。
+     * aspect aspect等于width / height，是照相机水平方向和竖直方向长度的比值，通常设为Canvas的横纵比例。
+     * near/far 分别是照相机到视景体最近、最远的距离，均为正值，且far应大于near。
+     */
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(400, 300);
+    document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
+
+    var scene = new THREE.Scene();
+
+    var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 10);
+    camera.position.set(0, 0, 5);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1),
+            new THREE.MeshBasicMaterial({
+                color: 0xff0000,
+                wireframe: true
+            })
+    );
+    scene.add(cube);
+
+    renderer.render(scene, camera);
+</script>
+</html>

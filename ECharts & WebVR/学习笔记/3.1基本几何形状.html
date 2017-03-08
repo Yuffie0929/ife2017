@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+<script type="text/javascript" src="../build/three.js"></script>
+<script type="text/javascript">
+
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(800, 600);
+    renderer.setClearColor(0x000000);
+    document.getElementsByTagName('body')[0].appendChild(renderer.domElement);
+
+    var scene = new THREE.Scene();
+
+    var camera = new THREE.OrthographicCamera(-10, 10, 7.5, -7.5, -10, 20);
+    camera.position.set(1, 1, 1);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    var meterial = new THREE.MeshLambertMaterial({
+        color: 0xFF2A91,
+        emissive: 0xFF3C51
+    });
+    var meteria2 = new THREE.MeshLambertMaterial({
+        color: 0xFF90C7,
+        emissive: 0xFF90C7
+    });
+
+    var light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(10, 15, 5);
+    scene.add(light);
+
+    drawAxes(scene);
+
+    drawCube(scene, meteria2);
+    //drawPlane(scene, meterial);
+    //drawSphere(scene, meterial);
+    //drawCircle(scene, meterial);
+    drawTorus1(scene, meterial);
+    drawTorus2(scene, meterial);
+    drawTorus3(scene, meterial);
+    drawTorus4(scene, meterial);
+
+    /**
+     * 长方体
+     * THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)
+     * width 是x方向上的长度
+     * height 是y方向上的长度
+     * depth 是z方向上的长度
+     * 后三个参数分别是在三个方向上的分段数，如widthSegments为3的话，代表x方向上水平分为三份。一般情况下不需要分段的话，可以不设置后三个参数，后三个参数的缺省值为1。其他几何形状中的分段也是类似的，下面不做说明。
+     */
+    function drawCube(scene, meterial){
+        var cuboid = new THREE.Mesh(new THREE.CubeGeometry(7, 3, 2.5, 1, 1, 1), meterial);
+        cuboid.position.z = 1;
+        cuboid.position.x = 2;
+        cuboid.position.y = 1.5;
+        scene.add(cuboid);
+    }
+
+    /**
+     * 长方形
+     * THREE.PlaneGeometry(width, height, widthSegments, heightSegments)
+     * width 是x方向上的长度
+     * height 是y方向上的长度
+     */
+    function drawPlane(scene, meterial){
+        var plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 4), meterial);
+        scene.add(plane);
+    }
+
+    /**
+     * 球体
+     * THREE.SphereGeometry(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, thetaStart, thetaLength)
+     * radius 是半径
+     * segmentsWidth 表示经度上的切片数
+     * segmentsHeight 表示纬度上的切片数
+     * phiStart 表示经度开始的弧度
+     * phiLength 表示经度跨过的弧度
+     * thetaStart 表示纬度开始的弧度
+     * thetaLength 表示纬度跨过的弧度
+     */
+    function drawSphere(scene, meterial){
+        var sphere = new THREE.Mesh(new THREE.SphereGeometry(4, 10, 9), meterial);
+        scene.add(sphere);
+    }
+
+    /**
+     * 球体
+     * THREE.CircleGeometry(radius, segments, thetaStart, thetaLength)
+     * radius 是半径
+     * segments 表示切片数
+     * thetaStart 表示纬度开始的弧度
+     * thetaLength 表示纬度跨过的弧度
+     */
+    function drawCircle(scene, meterial){
+        var circle = new THREE.Mesh(new THREE.CircleGeometry(3, 18, Math.PI / 3, Math.PI / 3 * 4), meterial);
+        scene.add(circle);
+    }
+
+    /**
+     * 球体
+     * THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc);
+     * radius 是圆环半径
+     * tube 是管道半径
+     * radialSegments 表示纬度开始的弧度
+     * tubularSegments 表示纬度跨过的弧度
+     * arc 圆环面的弧度 缺省值为Math.PI * 2
+     */
+    function drawTorus1(scene, meterial){
+        var torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterial);
+        torus.position.z = 2; //位移
+        torus.scale.z = 2;  //变形
+        torus.rotation.z = 0;  //旋转
+        scene.add(torus);
+    }
+    function drawTorus2(scene, meterial){
+        var torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterial);
+        torus.scale.z = 2;
+        scene.add(torus);
+    }
+    function drawTorus3(scene, meterial){
+        var torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterial);
+        torus.position.x = 4;
+        torus.scale.z = 2;
+        scene.add(torus);
+    }
+    function drawTorus4(scene, meterial){
+        var torus = new THREE.Mesh(new THREE.TorusGeometry(1, 0.3, 18, 18), meterial);
+        torus.position.z = 2; //位移
+        torus.position.x = 4;
+        torus.scale.z = 2;
+        scene.add(torus);
+    }
+
+    //绘制坐标轴
+    function drawAxes(scene) {
+        // x-axis
+        var xGeo = new THREE.Geometry();
+        xGeo.vertices.push(new THREE.Vector3(0, 0, 0));
+        xGeo.vertices.push(new THREE.Vector3(3, 0, 0));
+        var xMat = new THREE.LineBasicMaterial({
+            color: 0xff0000
+        });
+        var xAxis = new THREE.Line(xGeo, xMat);
+        scene.add(xAxis);
+
+        // y-axis
+        var yGeo = new THREE.Geometry();
+        yGeo.vertices.push(new THREE.Vector3(0, 0, 0));
+        yGeo.vertices.push(new THREE.Vector3(0, 3, 0));
+        var yMat = new THREE.LineBasicMaterial({
+            color: 0x00ff00
+        });
+        var yAxis = new THREE.Line(yGeo, yMat);
+        scene.add(yAxis);
+
+        // z-axis
+        var zGeo = new THREE.Geometry();
+        zGeo.vertices.push(new THREE.Vector3(0, 0, 0));
+        zGeo.vertices.push(new THREE.Vector3(0, 0, 3));
+        var zMat = new THREE.LineBasicMaterial({
+            color: 0x00ccff
+        });
+        var zAxis = new THREE.Line(zGeo, zMat);
+        scene.add(zAxis);
+    }
+
+    renderer.render(scene, camera);
+</script>
+</html>
