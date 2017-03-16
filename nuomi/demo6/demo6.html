@@ -10,21 +10,19 @@
 
         input[type=checkbox],
         input[type=radio] {
-            background-color: transparent;
-            padding: 0;
-            margin: 0;
             display: none;
         }
 
-        .checkbox {
+        .cus-checkbox1 {
+            margin-right: 2px;
             display: inline-block;
             width: 14px;
             height: 14px;
             background: url("input.png") no-repeat;
-            background-position: -25px -33px; /*-60, -32*/
+            background-position: -25px -33px;
         }
 
-        .radio {
+        .cus-radio1 {
             display: inline-block;
             width: 16px;
             height: 16px;
@@ -32,57 +30,91 @@
             background-position: -24px -10px;
         }
 
-        .checkbox.select {
+        input[name=checkbox1]:checked + label {
             background-position: -60px -32px;
         }
 
-        .radio.select {
+        input[name=radio1]:checked + label {
             background-position: -59px -10px;
         }
+
+        .cus-checkbox2 {
+            position: relative;
+            margin-right: 2px;
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border:1px solid #ddd;
+        }
+
+        .cus-radio2 {
+            position: relative;
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border:1px solid #ddd;
+            border-radius: 50%;
+        }
+
+        input[name=checkbox2]:checked + label{
+            border: 1px solid red;
+        }
+
+        input[name=checkbox2]:checked + label:after {
+            position: absolute;
+            top:0;
+            left:0;
+            text-align: center;
+            font-size: 12px;
+            line-height: 12px;
+            color:red;
+            content: '\2714';
+            width:12px;
+            height: 12px;
+        }
+
+        input[name=radio2]:checked + label {
+            border: 1px solid red;
+        }
+        input[name=radio2]:checked + label:after {
+            position: absolute;
+            top:-1px;
+            left:0;
+            text-align: center;
+            font-size: 14px;
+            line-height: 14px;
+            color:red;
+            content: '●';
+            width:14px;
+            height: 14px;
+        }
+
     </style>
-    <script type="text/javascript" src="../../build/jquery.min.js"></script>
 </head>
 <body>
 <div>
     <p>背景图</p>
-    <label for="checkbox1" class="checkbox"></label>
-    <input type="checkbox" id="checkbox1" value="1" name="checkbox">
-    <label for="checkbox2" class="checkbox"></label>
-    <input type="checkbox" id="checkbox2" value="2" name="checkbox">
+    <input id="checkbox1" name="checkbox1" type="checkbox" value="1">
+    <label for="checkbox1" class="cus-checkbox1"></label>
+    <input id="checkbox2" name="checkbox1" type="checkbox" value="2">
+    <label for="checkbox2" class="cus-checkbox1"></label>
+    <br>
+    <input id="radio1" name="radio1" type="radio" value="1" checked>
+    <label for="radio1" class="cus-radio1"></label>
+    <input id="radio2" name="radio1" type="radio" value="2">
+    <label for="radio2" class="cus-radio1"></label>
 </div>
 <div>
     <p>伪元素</p>
-    <label for="radio1" class="radio select" input-name="radio"></label>
-    <input type="radio" id="radio1" name="radio" checked value="1">
-    <label for="radio2" class="radio" input-name="radio"></label>
-    <input type="radio" id="radio2" name="radio" value="2">
+    <input id="checkbox3" name="checkbox2" type="checkbox" value="3">
+    <label for="checkbox3" class="cus-checkbox2"></label>
+    <input id="checkbox4" name="checkbox2" type="checkbox" value="4">
+    <label for="checkbox4" class="cus-checkbox2"></label>
+    <br>
+    <input id="radio3" name="radio2" type="radio" value="3" checked>
+    <label for="radio3" class="cus-radio2"></label>
+    <input id="radio4" name="radio2" type="radio" value="4">
+    <label for="radio4" class="cus-radio2"></label>
 </div>
-<button>保存</button>
-<script type="text/javascript">
-    $('label.checkbox').on('click', function () {
-        $(this).toggleClass('select');
-    });
-    $('label.radio').on('click', function () {
-        var name = $(this).attr('input-name');
-        $('label.radio[input-name=' + name + ']').toggleClass('select');
-        $(this).addClass('select');
-    });
-
-    $('button').on('click', function () {
-        var checkbox = document.getElementsByName('checkbox');
-        var s = '';
-        for (var i = 0; i < checkbox.length; i++) {
-            if (checkbox[i].checked) s += (s == '' ? '' : ',') + checkbox[i].value;
-        }
-        alert(s == '' ? '你还没有选择任何内容！' : '多选框选择的是：' + s);
-
-        var radio = document.getElementsByName('radio');
-        var s = '';
-        for (var i = 0; i < radio.length; i++) {
-            if (radio[i].checked) s += (s == '' ? '' : ',') + radio[i].value;
-        }
-        alert(s == '' ? '你还没有选择任何内容！' : '单选框选择的是：' + s);
-    })
-</script>
 </body>
 </html>
