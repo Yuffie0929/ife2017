@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义网页右键菜单</title>
+    <style>
+        html, body{
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #menu {
+            display: none;
+            background-color: #fff;
+            position: fixed;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .menu-item:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+<div id="menu">
+    <div class="menu-item" onclick="menuFunction.item1()">item1</div>
+    <div class="menu-item" onclick="menuFunction.item2()">item2</div>
+</div>
+<script type="text/javascript">
+    var menu = document.getElementById('menu');
+    var body = document.getElementsByTagName('body')[0];
+    var menuFunction = {
+        item1: function () {
+            body.style.backgroundColor = '#F1C2C2';
+        },
+        item2: function () {
+            body.style.backgroundColor = '#C7B1DD';
+        }
+    };
+
+    document.oncontextmenu = function (ev) {
+        ev = ev || window.event;
+        var x = ev.clientX;
+        var y = ev.clientY;
+        menu.style.display = 'block';
+        var menuWidth = getStyle(menu, 'width').replace('px', '') - 0;
+        var menuHeight = getStyle(menu, 'height').replace('px', '') - 0;
+        var clientWidth = document.documentElement.clientWidth;
+        var clientHeight = document.documentElement.clientHeight;
+        if(clientWidth - x > menuWidth){
+            menu.style.left = x + 'px';
+        } else {
+            menu.style.left = x - menuWidth + 'px';
+        }
+        if(clientHeight - y > menuHeight){
+            menu.style.top = y + 'px';
+        } else {
+            menu.style.top = y - menuHeight + 'px';
+        }
+        return false;
+    };
+
+    document.onclick = function () {
+        menu.style.display = 'none';
+    };
+
+    function getStyle(el, styleName) {
+        return el.style[styleName] ? el.style[styleName] : el.currentStyle ? el.currentStyle[styleName] : window.getComputedStyle(el, null)[styleName];
+    }
+
+</script>
+</body>
+</html>
