@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义checkbox， radio样式</title>
+    <style>
+        div {
+            position: relative;
+        }
+
+        input[type=checkbox],
+        input[type=radio] {
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            display: none;
+        }
+
+        .checkbox {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            background: url("input.png") no-repeat;
+            background-position: -25px -33px; /*-60, -32*/
+        }
+
+        .radio {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: url("input.png") no-repeat;
+            background-position: -24px -10px;
+        }
+
+        .checkbox.select {
+            background-position: -60px -32px;
+        }
+
+        .radio.select {
+            background-position: -59px -10px;
+        }
+    </style>
+    <script type="text/javascript" src="../../build/jquery.min.js"></script>
+</head>
+<body>
+<div>
+    <p>背景图</p>
+    <label for="checkbox1" class="checkbox"></label>
+    <input type="checkbox" id="checkbox1" value="1" name="checkbox">
+    <label for="checkbox2" class="checkbox"></label>
+    <input type="checkbox" id="checkbox2" value="2" name="checkbox">
+</div>
+<div>
+    <p>伪元素</p>
+    <label for="radio1" class="radio select" input-name="radio"></label>
+    <input type="radio" id="radio1" name="radio" checked value="1">
+    <label for="radio2" class="radio" input-name="radio"></label>
+    <input type="radio" id="radio2" name="radio" value="2">
+</div>
+<button>保存</button>
+<script type="text/javascript">
+    $('label.checkbox').on('click', function () {
+        $(this).toggleClass('select');
+    });
+    $('label.radio').on('click', function () {
+        var name = $(this).attr('input-name');
+        $('label.radio[input-name=' + name + ']').toggleClass('select');
+        $(this).addClass('select');
+    });
+
+    $('button').on('click', function () {
+        var checkbox = document.getElementsByName('checkbox');
+        var s = '';
+        for (var i = 0; i < checkbox.length; i++) {
+            if (checkbox[i].checked) s += (s == '' ? '' : ',') + checkbox[i].value;
+        }
+        alert(s == '' ? '你还没有选择任何内容！' : '多选框选择的是：' + s);
+
+        var radio = document.getElementsByName('radio');
+        var s = '';
+        for (var i = 0; i < radio.length; i++) {
+            if (radio[i].checked) s += (s == '' ? '' : ',') + radio[i].value;
+        }
+        alert(s == '' ? '你还没有选择任何内容！' : '单选框选择的是：' + s);
+    })
+</script>
+</body>
+</html>
